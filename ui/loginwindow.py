@@ -17,12 +17,26 @@ class loginWindow(ctk.CTkFrame):
         self.login_button.pack(pady=10)
 
     def login_action(self):
-        # Add your login logic here (e.g., check credentials)
-        username = self.username_entry.get()
-        username = username[1:] if username.startswith("0") else username
-        password = self.password_entry.get()
-        success = self.controller.login(username, password)
-        if success:
-            print("Login successful")
-        else:
-            print("Login failed")
+         # 1. Change UI to loading state
+        self.login_button.configure(text="Loading...", state="disabled", cursor="wait")
+
+        # 2. FORCE the UI to redraw immediately!
+        self.update_idletasks() 
+        try:
+
+            # Add your login logic here (e.g., check credentials)
+            username = self.username_entry.get()
+            username = username[1:] if username.startswith("0") else username
+            password = self.password_entry.get()
+            success = self.controller.login(username, password)
+            if success:
+                print("Login successful")
+            else:
+                print("Login failed")
+        except Exception as e:
+            print(f"Error during login: {e}")
+            self.login_button.configure(text="Login", state="normal", cursor="arrow")
+        finally:
+            # 4. Restore UI state (This runs even if there is an error)
+            self.login_button.configure(text="Login" , state="normal", cursor="arrow")
+            self.update_idletasks()

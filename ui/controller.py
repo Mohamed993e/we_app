@@ -2,6 +2,7 @@ import core
 import customtkinter as ctk
 from typing import Any, Callable
 class Controller:
+    # load : core.Load = core.Load()
     def __init__(self , view : ctk.CTkFrame, dismiss_callback : Callable[[], Any]=None):
         self.user = core.User()
         self.view = view
@@ -29,6 +30,10 @@ class Controller:
         self.view.update()
    
     def login(self, username, password) -> bool:
+        # if self.user.isLoading.is_token():
+        #     return
+        # else: 
+        #     self.user.isLoading.token()
         test = core.User(load=False,username=username, password=password)
         test.getToken()
         if test.is_logged_in == False:
@@ -44,5 +49,9 @@ class Controller:
         self.show_login()
     
     def get_record(self):
+        # if self.user.isLoading.is_record():
+        #     return
+        # else: 
+        #     self.user.isLoading.record()
         return self.user.getRecord()
   

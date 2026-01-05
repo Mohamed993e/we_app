@@ -3,14 +3,33 @@ import os
 import json
 from core.remote import authenticate_user, query_free_unit
 from core.record import Record
+from enum import Enum
+class loadEnum(Enum):
+    token = 1
+    record =2
 
+class Load():
+    def __init__(self , load : bool = False , type : loadEnum = None):
+        self.load = load
+        self.type = type
+    def token(self):
+        self.load = True
+        self.type = loadEnum.token
+    def record(self):
+        self.load = True
+        self.type = loadEnum.record
+    def is_token(self)->bool:
+        return self.load and self.type == loadEnum.token
+    def is_record(self)->bool:
+        return self.load and self.type == loadEnum.record
+        
 class User: 
     username : str =" "
     password : str =" "
     indiv_login_token : str =" "
     subscriber_id : str =" "
     csrftoken : str =" "
-    
+    isLoading : Load = Load()
     def __init__(self , load : bool = True , username : str =" " , password : str =" "):
         self.username = username
         self.password = password

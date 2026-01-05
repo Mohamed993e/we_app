@@ -96,8 +96,21 @@ class HomeWindow(ctk.CTkFrame):
 
     def manual_refresh(self):
         """Fetches fresh data from controller."""
-        self.current_record = self.controller.get_record()
-        self.update_static_ui()
+        # 1. Change UI to loading state
+        self.btn_refresh.configure(text="Loading...", state="disabled", cursor="wait")
+        
+        # 2. FORCE the UI to redraw immediately!
+        self.update_idletasks() 
+        
+        # 3. Perform the heavy operation (App will freeze here)
+        try:
+            self.current_record = self.controller.get_record()
+        except Exception as e:
+            print(f"Error: {e}")
+        finally:
+            # 4. Restore UI state (This runs even if there is an error)
+            self.btn_refresh.configure(text="Refresh", state="normal", cursor="arrow")
+            self.update_static_ui()
 
     def update_static_ui(self):
         """Updates elements that don't change every second."""
